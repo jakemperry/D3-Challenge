@@ -1,9 +1,9 @@
-var data = []
+// var data = []
 
-d3.csv('./static/data/data.csv').then(function loadData(incoming){
-    data = incoming
-    console.log(data)
-})
+// d3.csv('./static/data/data.csv').then(function loadData(incoming){
+//     data = incoming
+//     console.log(data)
+// })
 
 var svgWidth = 1000; 
 var svgHeight = 750;
@@ -81,19 +81,36 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYA
 }
 
 function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
-    var label;
+    var xlabel;
+    var ylabel;
     // Set the x axis label based on chosen x axis value
     if (chosenXAxis === 'age') {
-        label = 'Age';
+        xlabel = 'Age';
     } else {
-        label = 'XAxisNotAnOptionYet';
+        xlabel = 'XAxisNotAnOptionYet';
     }
     // Set the y axis label based on chosen y axis value
     if (chosenYAxis === 'obesity') {
-        label = 'Percent Obesity';
+        ylabel = 'Percent Obesity';
     } else {
-        label = "YAxisNotAnOptionYet"
+        ylabel = "YAxisNotAnOptionYet"
     }
 
+    var toolTip = d3.tip()
+        .attr('class', 'tooltip')
+        .offset([50,-50])
+        .html(function(d) {
+            return (`${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}`)
+        })
 
+    circlesGroup.call(toolTip);
+
+    circlesGroup.on("mouseover", function(data) {
+        toolTip.show(data);
+    })
+        .on("mouseout", function(data, index) {
+            toolTip.hide(data);
+        })
+    
+    return circlesGroup;
 }

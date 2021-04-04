@@ -114,3 +114,42 @@ function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
     
     return circlesGroup;
 }
+
+// Get data, and then run everything below
+d3.csv('./static/data/data.csv').then(function(data, err){
+    if (err) throw err; 
+
+    data.forEach(function(data){
+        data.age = +data.age
+        data.ageMoe = +data.ageMoe
+        data.healthcare = +data.healthcare
+        data.healthcareHigh = +data.healthcareHigh
+        data.healthcareLow = +data.healthcareLow
+        data.income = +data.income
+        data.incomeMoe = +data.incomeMoe
+        data.obesity = +data.obesity
+        data.obesityHigh = +data.obesityHigh
+        data.obesityLow = +data.obesityLow
+        data.poverty = +data.poverty
+        data.povertyMoe = +data.povertyMoe
+        data.smokes = +data.smokes
+        data.smokesHigh = +data.smokesHigh
+        data.smokesLow = +data.smokesLow
+    });
+
+    var xLinearScale = xScale(data,chosenXAxis);
+
+    var yLinearScale = yScale(data, chosenYAxis);
+
+    var bottomAxis = d3.axisBottom(xLinearScale);
+    var leftAxis = d3.axisLeft(yLinearScale);
+
+    var xAxis = chartgroup.append('g')
+        .classed('x-axis', true)
+        .attr("transform", `translate(0, ${height})`)
+        .call(bottomAxis);
+
+    var yAxis = chartgroup.append('g')
+        .classed('y-axis', true)
+        .call(leftAxis);
+})

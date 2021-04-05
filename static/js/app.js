@@ -1,10 +1,3 @@
-// var data = []
-
-// d3.csv('./static/data/data.csv').then(function loadData(incoming){
-//     data = incoming
-//     console.log(data)
-// })
-
 var svgWidth = 1000; 
 var svgHeight = 750;
 

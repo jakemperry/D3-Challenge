@@ -45,7 +45,7 @@ function yScale(data, chosenYAxis) {
     .domain([d3.min(data, d => d[chosenYAxis]) * 0.9,
             d3.max(data, d => d[chosenYAxis]) * 1.1
         ])
-        .range([0,chartHeight]);
+        .range([chartHeight,0]);
     
     return yLinearScale;
 }
@@ -161,7 +161,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             .attr("cy", d=>yLinearScale(d[chosenYAxis]))
             .attr("r", 20)
             .attr("fill", "blue")
-            .attr("opacity", "0.7")
+            .attr("opacity", "0.7")    
 
     var xlabelsGroup = chartGroup.append('g')
         .attr("transform", `translate(${chartWidth /2}, ${chartHeight + 20})`);
@@ -210,7 +210,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .attr("transform", "rotate(-90)")
         .attr("x",0)
         .attr('y', -30)
-        .attr("value", "income")
+        .attr("value", "healthcare")
         .classed("inactive", true)
         .text("Lacks Healthcare (%)");
 
@@ -269,7 +269,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             if (value !== chosenYAxis) {
                 chosenYAxis = value;
 
-                yLinearScale = xScale(data, chosenYAxis);
+                yLinearScale = yScale(data, chosenYAxis);
 
                 yAxis = renderYAxis(yLinearScale, yAxis);
 
@@ -309,4 +309,6 @@ d3.csv('./static/data/data.csv').then(function(data, err){
                 }
             }
     })
-})
+}).catch(function(error){
+    console.log(error);
+});

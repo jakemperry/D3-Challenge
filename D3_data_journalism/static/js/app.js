@@ -214,4 +214,99 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed("inactive", true)
         .text("Lacks Healthcare (%)");
 
+    var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+    xlabelsGroup.selectAll("text")
+        .on('click', function() {
+            var value  = d3.select(this).attr("value");
+            if (value !== chosenXAxis) {
+                chosenXAxis = value;
+
+                xLinearScale = xScale(data, chosenXAxis);
+
+                xAxis = renderXAxis(xLinearScale, xAxis);
+
+                circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+                circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+                if (chosenXAxis === "poverty") {
+                    povertyLabel
+                        .classed("active", true)
+                        .classed("inactive", false);
+                    ageLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                    incomeLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                } else if (chosenXAxis === "age") {
+                    ageLabel
+                        .classed("active", true)
+                        .classed("inactive", false);
+                    povertyLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                    incomeLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                } else {
+                    incomeLabel
+                        .classed("active", true)
+                        .classed("inactive", false);
+                    povertyLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                    ageLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                }
+            }
+        })
+
+    ylabelsGroup.selectAll("text")
+        .on('click', function() {
+            var value  = d3.select(this).attr("value");
+            if (value !== chosenYAxis) {
+                chosenYAxis = value;
+
+                yLinearScale = xScale(data, chosenYAxis);
+
+                yAxis = renderYAxis(yLinearScale, yAxis);
+
+                circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+                circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+                if (chosenYAxis === "obesity") {
+                    obesityLabel
+                        .classed("active", true)
+                        .classed("inactive", false);
+                    smokesLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                    healthcareLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                } else if (chosenYAxis === "smokes") {
+                    smokesLabel
+                        .classed("active", true)
+                        .classed("inactive", false);
+                    obesityLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                    healthcareLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                } else {
+                    healthcareLabel
+                        .classed("active", true)
+                        .classed("inactive", false);
+                    obesityLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                    smokesLabel
+                        .classed("inactive", true)
+                        .classed("active", false);
+                }
+            }
+    })
 })

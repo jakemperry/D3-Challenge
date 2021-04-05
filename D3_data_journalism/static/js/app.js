@@ -11,8 +11,8 @@ var svgHeight = 750;
 var chartMargin = {
     top: 25,
     right: 25,
-    bottom: 25,
-    left: 25
+    bottom: 90,
+    left: 90
 };
 
 var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
@@ -32,20 +32,20 @@ var chosenYAxis = 'obesity';
 
 function xScale(data, chosenXAxis) {
     var xLinearScale = d3.scaleLinear()
-        .domain([d3.min(data, d => d[chosenXAxis]),
-                d3.max(data, d => d[chosenXAxis])
+        .domain([d3.min(data, d => d[chosenXAxis]) * 0.9,
+                d3.max(data, d => d[chosenXAxis]) * 1.1
         ])
         .range([0,chartWidth]);
     
     return xLinearScale;
 }
 
-function yScale(data, chosenyAxis) {
+function yScale(data, chosenYAxis) {
     var yLinearScale = d3.scaleLinear()
-    .domain([d3.min(data, d => d[chosenYAxis]),
-                d3.max(data, d => d[chosenYAxis])
+    .domain([d3.min(data, d => d[chosenYAxis]) * 0.9,
+            d3.max(data, d => d[chosenYAxis]) * 1.1
         ])
-        .range([0,chartWidth]);
+        .range([0,chartHeight]);
     
     return yLinearScale;
 }
@@ -144,12 +144,74 @@ d3.csv('./static/data/data.csv').then(function(data, err){
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
-    var xAxis = chartgroup.append('g')
+    var xAxis = chartGroup.append('g')
         .classed('x-axis', true)
-        .attr("transform", `translate(0, ${height})`)
+        .attr("transform", `translate(0, ${chartHeight})`)
         .call(bottomAxis);
 
-    var yAxis = chartgroup.append('g')
+    var yAxis = chartGroup.append('g')
         .classed('y-axis', true)
         .call(leftAxis);
+
+    var circlesGroup = chartGroup.selectAll("circle")
+        .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", d=>xLinearScale(d[chosenXAxis]))
+            .attr("cy", d=>yLinearScale(d[chosenYAxis]))
+            .attr("r", 20)
+            .attr("fill", "blue")
+            .attr("opacity", "0.7")
+
+    var xlabelsGroup = chartGroup.append('g')
+        .attr("transform", `translate(${chartWidth /2}, ${chartHeight + 20})`);
+    
+    var povertyLabel = xlabelsGroup.append("text")
+        .attr("x",0)
+        .attr('y', 20)
+        .attr("value", "poverty")
+        .classed("inactive", true)
+        .text("In Poverty (%)");
+    
+    var ageLabel = xlabelsGroup.append("text")
+        .attr("x",0)
+        .attr('y', 40)
+        .attr("value", "age")
+        .classed("active", true)
+        .text("Age (Median)");
+
+    var incomeLabel = xlabelsGroup.append("text")
+        .attr("x",0)
+        .attr('y', 60)
+        .attr("value", "income")
+        .classed("inactive", true)
+        .text("Income ($, Median)");
+
+    var ylabelsGroup = chartGroup.append('g')
+        .attr("transform", `translate(0, ${chartHeight/2})`);
+    
+    var obesityLabel = ylabelsGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x",0)
+        .attr('y', -70)
+        .attr("value", "obesity")
+        .classed("active", true)
+        .text("Obese (%)");
+    
+    var smokesLabel = ylabelsGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x",0)
+        .attr('y', -50)
+        .attr("value", "smokes")
+        .classed("inactive", true)
+        .text("Smokes (%)");
+
+    var healthcareLabel = ylabelsGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x",0)
+        .attr('y', -30)
+        .attr("value", "income")
+        .classed("inactive", true)
+        .text("Lacks Healthcare (%)");
+
 })

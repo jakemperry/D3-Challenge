@@ -26,6 +26,7 @@
 /* font size dependent on radius, see app.js */
 .stateText {
   font-family: sans-serif;
+  font-size: 10px;
   fill: rgb(0, 0, 0);
   text-anchor: middle;
 }

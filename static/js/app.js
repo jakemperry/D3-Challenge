@@ -169,7 +169,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .merge(circleTextGroup)
         .attr("x", d => xLinearScale(d[chosenXAxis]))
         .attr("y", d => yLinearScale(d[chosenYAxis])+5)
-        .html(d => d.abbr)
+        .html(d => d.abbr);
 
     var circlesGroup = chartGroup.selectAll("circle")
         .data(data)
@@ -177,9 +177,9 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             .append("circle")
             .attr("cx", d=>xLinearScale(d[chosenXAxis]))
             .attr("cy", d=>yLinearScale(d[chosenYAxis]))
-            .attr("r", 20)
+            .attr("r", 10)
             .attr("fill", "blue")
-            .attr("opacity", "0.7")
+            .attr("opacity", "0.5")
             .classed("stateCircle", true)
 
     var xlabelsGroup = chartGroup.append('g')

@@ -163,7 +163,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .call(leftAxis);
 
     var circleTextGroup=""
-    
+
     function updateCircleTextGroup(data) {
         circleTextGroup = chartGroup.selectAll(".stateText")
         .data(data);
@@ -258,7 +258,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
 
                 circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
-                circleTextGroup = renderCircleText(circleTextGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+                circleTextGroup = renderCircleText(updateCircleTextGroup(data), xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
                 circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
                 if (chosenXAxis === "poverty") {
@@ -307,7 +307,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
 
                 circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
-                circleTextGroup = renderCircleText(circleTextGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+                circleTextGroup = renderCircleText(updateCircleTextGroup(data), xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
                 circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
                 if (chosenYAxis === "obesity") {

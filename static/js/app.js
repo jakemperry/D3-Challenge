@@ -11,6 +11,8 @@ var chartMargin = {
 var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
 var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 
+// var circleTextGroup=""
+
 var svg = d3
     .select('#scatter')
     .append('svg')
@@ -160,16 +162,25 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed('y-axis', true)
         .call(leftAxis);
 
-    var circleTextGroup = chartGroup.selectAll(".stateText")
-    .data(data);
+    var circleTextGroup=""
+    
+    function updateCircleTextGroup(data) {
+        circleTextGroup = chartGroup.selectAll(".stateText")
+        .data(data);
 
-    circleTextGroup.enter()
-        .append("text")
-        .classed("stateText", true)
-        .merge(circleTextGroup)
-        .attr("x", d => xLinearScale(d[chosenXAxis]))
-        .attr("y", d => yLinearScale(d[chosenYAxis])+5)
-        .html(d => d.abbr);
+        circleTextGroup.enter()
+            .append("text")
+            .classed("stateText", true)
+            .merge(circleTextGroup)
+            .attr("x", d => xLinearScale(d[chosenXAxis]))
+            .attr("y", d => yLinearScale(d[chosenYAxis])+5)
+            .html(d => d.abbr);
+
+        circleTextGroup.exit().remove();
+
+        return circleTextGroup
+    }
+    updateCircleTextGroup(data)
 
     var circlesGroup = chartGroup.selectAll("circle")
         .data(data)

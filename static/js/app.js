@@ -124,6 +124,8 @@ function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
 d3.csv('./static/data/data.csv').then(function(data, err){
     if (err) throw err; 
 
+    console.log(data)
+
     data.forEach(function(data){
         data.age = +data.age
         data.ageMoe = +data.ageMoe
@@ -158,6 +160,15 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed('y-axis', true)
         .call(leftAxis);
 
+    var circleTextGroup = chartGroup.selectAll("text")
+    .data(data)
+        .enter()
+        .append("text")
+        .attr("x", d => xLinearScale(d[chosenXAxis]))
+        .attr("y", d => yLinearScale(d[chosenYAxis])+5)
+        .classed("stateText", true)
+        .html(d => d.abbr)
+
     var circlesGroup = chartGroup.selectAll("circle")
         .data(data)
             .enter()
@@ -168,15 +179,6 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             .attr("fill", "blue")
             .attr("opacity", "0.7")
             .classed("stateCircle", true)
-            
-    var circleTextGroup = chartGroup.selectAll("text")
-        .data(data)
-            .enter()
-            .append("text")
-            .attr("x", d => xLinearScale(d[chosenXAxis]))
-            .attr("y", d => yLinearScale(d[chosenYAxis])+5)
-            .classed("stateText", true)
-            .text(d => d.abbr)
 
     var xlabelsGroup = chartGroup.append('g')
         .attr("transform", `translate(${chartWidth /2}, ${chartHeight + 20})`);

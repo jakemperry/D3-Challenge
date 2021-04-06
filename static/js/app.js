@@ -78,15 +78,19 @@ function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
     var ylabel;
     // Set the x axis label based on chosen x axis value
     if (chosenXAxis === 'age') {
-        xlabel = 'Age';
+        xlabel = 'Age (Median)';
+    } else if (chosenXAxis === 'poverty'){
+        xlabel = 'In Poverty (%)';
     } else {
-        xlabel = 'XAxisNotAnOptionYet';
+        xlabel = 'Income ($, Median)';
     }
     // Set the y axis label based on chosen y axis value
     if (chosenYAxis === 'obesity') {
         ylabel = 'Percent Obesity';
+    } else if (chosenYAxis === 'smokes') {
+        ylabel = 'Smokes (%)'
     } else {
-        ylabel = "YAxisNotAnOptionYet"
+        ylabel = "Lacks Healthcare (%)"
     }
 
     var toolTip = d3.tip()

@@ -94,8 +94,8 @@ function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
     }
 
     var toolTip = d3.tip()
-        .attr('class', 'tooltip')
-        .offset([50,-50])
+        .attr('class', 'd3-tip')
+        .offset([0,-85])
         .html(function(d) {
             return (`${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}`)
         })

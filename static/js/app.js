@@ -64,13 +64,21 @@ function renderYAxis(newYScale, yAxis){
 }
 
 function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
-
     circlesGroup.transition()
     .duration(500)
     .attr("cx", d => newXScale(d[chosenXAxis]))
     .attr("cy", d => newYScale(d[chosenYAxis]));
 
     return circlesGroup;
+}
+
+function renderCircleText(circleTextGroup, newXscale, chosenXAxis, newYScale, chosenYAxis) {
+    circleTextGroup.transition()
+    .duration(500)
+    .attr("x", d => newXscale(d[chosenXAxis]))
+    .attr("y", d => newYScale(d[chosenYAxis]));
+
+    return circleTextGroup;
 }
 
 function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
@@ -86,7 +94,7 @@ function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
     }
     // Set the y axis label based on chosen y axis value
     if (chosenYAxis === 'obesity') {
-        ylabel = 'Percent Obesity';
+        ylabel = 'Obesity (%)';
     } else if (chosenYAxis === 'smokes') {
         ylabel = 'Smokes (%)'
     } else {
@@ -158,7 +166,17 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             .attr("cy", d=>yLinearScale(d[chosenYAxis]))
             .attr("r", 20)
             .attr("fill", "blue")
-            .attr("opacity", "0.7")    
+            .attr("opacity", "0.7")
+            .classed("stateCircle", true)
+            
+    var circleTextGroup = chartGroup.selectAll("text")
+        .data(data)
+            .enter()
+            .append("text")
+            .attr("x", d => xLinearScale(d[chosenXAxis]))
+            .attr("y", d => yLinearScale(d[chosenYAxis]))
+            .classed("stateText", true)
+            .html(d => d.abbr)
 
     var xlabelsGroup = chartGroup.append('g')
         .attr("transform", `translate(${chartWidth /2}, ${chartHeight + 20})`);

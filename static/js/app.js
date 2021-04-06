@@ -76,7 +76,7 @@ function renderCircleText(circleTextGroup, newXscale, chosenXAxis, newYScale, ch
     circleTextGroup.transition()
     .duration(500)
     .attr("x", d => newXscale(d[chosenXAxis]))
-    .attr("y", d => newYScale(d[chosenYAxis]));
+    .attr("y", d => newYScale(d[chosenYAxis])+5);
 
     return circleTextGroup;
 }
@@ -174,9 +174,9 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             .enter()
             .append("text")
             .attr("x", d => xLinearScale(d[chosenXAxis]))
-            .attr("y", d => yLinearScale(d[chosenYAxis]))
+            .attr("y", d => yLinearScale(d[chosenYAxis])+5)
             .classed("stateText", true)
-            .html(d => d.abbr)
+            .text(d => d.abbr)
 
     var xlabelsGroup = chartGroup.append('g')
         .attr("transform", `translate(${chartWidth /2}, ${chartHeight + 20})`);
@@ -243,6 +243,8 @@ d3.csv('./static/data/data.csv').then(function(data, err){
 
                 circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
+                circleTextGroup = renderCircleText(circleTextGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
                 circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
                 if (chosenXAxis === "poverty") {
                     povertyLabel
@@ -289,6 +291,8 @@ d3.csv('./static/data/data.csv').then(function(data, err){
                 yAxis = renderYAxis(yLinearScale, yAxis);
 
                 circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+                circleTextGroup = renderCircleText(circleTextGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
                 circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
                 if (chosenYAxis === "obesity") {

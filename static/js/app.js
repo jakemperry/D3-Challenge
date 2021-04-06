@@ -160,13 +160,15 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed('y-axis', true)
         .call(leftAxis);
 
-    var circleTextGroup = chartGroup.selectAll("text")
-    .data(data)
-        .enter()
+    var circleTextGroup = chartGroup.selectAll(".stateText")
+    .data(data);
+
+    circleTextGroup.enter()
         .append("text")
+        .classed("stateText", true)
+        .merge(circleTextGroup)
         .attr("x", d => xLinearScale(d[chosenXAxis]))
         .attr("y", d => yLinearScale(d[chosenYAxis])+5)
-        .classed("stateText", true)
         .html(d => d.abbr)
 
     var circlesGroup = chartGroup.selectAll("circle")

@@ -162,7 +162,18 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed('y-axis', true)
         .call(leftAxis);
 
-    var circleTextGroup=""
+    var circleTextGroup=chartGroup.selectAll(".stateText")
+        .data(data);
+
+        circleTextGroup.enter()
+            .append("text")
+            .classed("stateText", true)
+            .merge(circleTextGroup)
+            .attr("x", d=>xLinearScale(d[chosenXAxis]))
+            .attr("y", d=>yLinearScale(d[chosenYAxis])+5)
+            .html(d => d.abbr);
+        
+        circleTextGroup.exit().remove();
 
     function updateCircleTextGroup(data) {
         circleTextGroup = chartGroup.selectAll(".stateText")
@@ -180,7 +191,12 @@ d3.csv('./static/data/data.csv').then(function(data, err){
 
         return circleTextGroup
     }
-    updateCircleTextGroup(data)
+    // updateCircleTextGroup(data)
+    
+        // .data(data)
+        //     .attr("x", d => xLinearScale(d[chosenXAxis]))
+        //     .attr("y", d => yLinearScale(d[chosenYAxis])+5)
+        
     console.log(circleTextGroup)
 
     var circlesGroup = chartGroup.selectAll("circle")

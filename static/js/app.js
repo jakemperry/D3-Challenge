@@ -181,6 +181,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         return circleTextGroup
     }
     updateCircleTextGroup(data)
+    console.log(circleTextGroup)
 
     var circlesGroup = chartGroup.selectAll("circle")
         .data(data)

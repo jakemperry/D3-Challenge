@@ -172,8 +172,8 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             .append("text")
             .classed("stateText", true)
             .merge(circleTextGroup)
-            .attr("x", d => xLinearScale(d[chosenXAxis]))
-            .attr("y", d => yLinearScale(d[chosenYAxis])+5)
+            // .attr("x", d => xLinearScale(d[chosenXAxis]))
+            // .attr("y", d => yLinearScale(d[chosenYAxis])+5)
             .html(d => d.abbr);
 
         circleTextGroup.exit().remove();

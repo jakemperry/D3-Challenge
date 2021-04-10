@@ -1,1 +1,5 @@
-# D3-Challenge
+# D3 Challenge
+
+A visualization of multiple measures of health (percent smoking, percent obese, and percent lacking access to healthcare) against societal factors (percent living in poverty, median income, and median age) for states in the United States.  Data are based on 2014 ACS 1-year estimates from the [US Census Bureau](https://data.census.gov/cedsci/).
+
+See the GitHub pages [site](https://jakemperry.github.io/D3-Challenge/) for the interactive visualization.  The plot shows different factors plotted on the X and Y axes.  Clicking an axis label will animate the graph as it updates to plot data using the newly selected axis label.  Hovering your cursor over a circle will show a tooltip with the state name, X axis value, and Y axis value.  The plot will load a default set of data and will update as new axes are clicked.

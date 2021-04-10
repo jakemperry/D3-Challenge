@@ -121,7 +121,7 @@ function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
     // Create a tooltip variable
     var toolTip = d3.tip()
         .attr('class', 'd3-tip')
-        .offset([0,-70]) //Use an offset so the tool tip doesn't overlap the circle you want to see
+        .offset([0,-85]) //Use an offset so the tool tip doesn't overlap the circle you want to see
         .html(function(d) {  //Add data to the tooltip based on the chosen X and Y axes
             return (`${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}`)
         })

@@ -266,6 +266,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
     var ylabelsGroup = chartGroup.append('g')
         .attr("transform", `translate(0, ${chartHeight/2})`);
     
+    // Add a label for obsesity data on the y axis.  Offset to avoid overlapping the axis and other labels
     var obesityLabel = ylabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x",0)
@@ -274,6 +275,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed("active", true)
         .text("Obese (%)");
     
+    // Add a label for smoking data on the y axis.  Offset to avoid overlapping the axis and other labels
     var smokesLabel = ylabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x",0)
@@ -282,6 +284,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed("inactive", true)
         .text("Smokes (%)");
 
+    // Add a label for healthcare data on the y axis.  Offset to avoid overlapping the axis and other labels
     var healthcareLabel = ylabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x",0)
@@ -290,23 +293,36 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed("inactive", true)
         .text("Lacks Healthcare (%)");
 
+    // Update the circles group with the latest tooltip by running updateToolTip.  Refer to new
+    // chosen X and Y axes
     var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
+    // Add an event handler for clicking the X axis labels
     xlabelsGroup.selectAll("text")
         .on('click', function() {
             var value  = d3.select(this).attr("value");
-            if (value !== chosenXAxis) {
+            if (value !== chosenXAxis) {  //If you click an axis that's not already active, run the function below
+                
+                // Set a new X axis value based on selection
                 chosenXAxis = value;
 
+                // Set a new xLinearScale based on the chosen X axis value
                 xLinearScale = xScale(data, chosenXAxis);
 
+                // Render a new x axis (which includes transition) based on the new linear scale
                 xAxis = renderXAxis(xLinearScale, xAxis);
 
+                // Render new circles based on the new X axis selection and the current Y axis
                 circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
+                // Render a new circle text group (state abbr) based on the newly selected X axis and the current Y axis
                 circleTextGroup = renderCircleText(updateCircleTextGroup(data), xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
+                // Update the tooltip to reflect the data from the chosen X and Y axes
                 circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+                // Set the class for the labels on the X axis based on the selected axis
+                // This will change the highlight color of the axes
                 if (chosenXAxis === "poverty") {
                     povertyLabel
                         .classed("active", true)
@@ -341,20 +357,28 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             }
         })
 
+    // Create an event handler for when a new Y axis is clicked
     ylabelsGroup.selectAll("text")
         .on('click', function() {
             var value  = d3.select(this).attr("value");
-            if (value !== chosenYAxis) {
+            if (value !== chosenYAxis) {  //If the selected Y axis is not the current Y axis, run the function below
+                
+                // Update the chosen Y axis to the clicked value
                 chosenYAxis = value;
 
+                // Update the Y linear scale based on the chosen Y axis
                 yLinearScale = yScale(data, chosenYAxis);
 
+                // Render the Y axis based on the new yLinearScale
                 yAxis = renderYAxis(yLinearScale, yAxis);
 
+                // Render a new circles group based on the newly selected Y axis and current X axis
                 circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
+                // Render a new circle text group (state abbr) based on the newly selected Y axis and current X axis
                 circleTextGroup = renderCircleText(updateCircleTextGroup(data), xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
+                // 
                 circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
                 if (chosenYAxis === "obesity") {
                     obesityLabel

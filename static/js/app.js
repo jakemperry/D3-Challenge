@@ -167,25 +167,35 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         data.smokesLow = +data.smokesLow
     });
 
+    // Set the x linear scale using the xScale function
     var xLinearScale = xScale(data,chosenXAxis);
 
+    // Set the y linear scale using the yScale function
     var yLinearScale = yScale(data, chosenYAxis);
 
+    // Set the bottom and left axes using the new X and Y linear scales
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
+    // Add an X axis chart group to the SVG
     var xAxis = chartGroup.append('g')
         .classed('x-axis', true)
         .attr("transform", `translate(0, ${chartHeight})`)
         .call(bottomAxis);
 
+    // Add a Y axis chart group to the SVG
     var yAxis = chartGroup.append('g')
         .classed('y-axis', true)
         .call(leftAxis);
 
+    // Create a circle text group for the state text abbreviations
     var circleTextGroup=chartGroup.selectAll(".stateText")
         .data(data);
 
+        // Step over the text that is already in the graph for the axes labels.
+        // Then add new text elements with the stateText class, with x and y locations
+        // based on the selected X and Y axes
+        // This is set up here to set the initial locations of the circle text group (state abbr)
         circleTextGroup.enter()
             .append("text")
             .classed("stateText", true)
@@ -196,6 +206,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         
         circleTextGroup.exit().remove();
 
+    // Set up a function that will update the circle text group when new axes are selected
     function updateCircleTextGroup(data) {
         circleTextGroup = chartGroup.selectAll(".stateText")
         .data(data);
@@ -204,22 +215,15 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             .append("text")
             .classed("stateText", true)
             .merge(circleTextGroup)
-            // .attr("x", d => xLinearScale(d[chosenXAxis]))
-            // .attr("y", d => yLinearScale(d[chosenYAxis])+5)
             .html(d => d.abbr);
 
         circleTextGroup.exit().remove();
 
         return circleTextGroup
     }
-    // updateCircleTextGroup(data)
-    
-        // .data(data)
-        //     .attr("x", d => xLinearScale(d[chosenXAxis]))
-        //     .attr("y", d => yLinearScale(d[chosenYAxis])+5)
-        
-    console.log(circleTextGroup)
 
+    // Create a circles group that creates a new set of circles based on the chosen X and Y axes
+    // Set radius to 10px, opacity to 0.5 (so state abbr can show thorugh), and class as stateCircle
     var circlesGroup = chartGroup.selectAll("circle")
         .data(data)
             .enter()
@@ -227,13 +231,14 @@ d3.csv('./static/data/data.csv').then(function(data, err){
             .attr("cx", d=>xLinearScale(d[chosenXAxis]))
             .attr("cy", d=>yLinearScale(d[chosenYAxis]))
             .attr("r", 10)
-            .attr("fill", "blue")
             .attr("opacity", "0.5")
             .classed("stateCircle", true)
 
+    // Create x axis labels, and center them at the bottom of the chart
     var xlabelsGroup = chartGroup.append('g')
         .attr("transform", `translate(${chartWidth /2}, ${chartHeight + 20})`);
     
+    // Add a label for poverty data on the x Axis
     var povertyLabel = xlabelsGroup.append("text")
         .attr("x",0)
         .attr('y', 20)
@@ -241,6 +246,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed("inactive", true)
         .text("In Poverty (%)");
     
+    // Add a label for age data on the x axis.  Offset to avoid overlapping other labels
     var ageLabel = xlabelsGroup.append("text")
         .attr("x",0)
         .attr('y', 40)
@@ -248,6 +254,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed("active", true)
         .text("Age (Median)");
 
+    // Add a label for income data on the x axis.  Offset to avoid overlapping other labels
     var incomeLabel = xlabelsGroup.append("text")
         .attr("x",0)
         .attr('y', 60)
@@ -255,6 +262,7 @@ d3.csv('./static/data/data.csv').then(function(data, err){
         .classed("inactive", true)
         .text("Income ($, Median)");
 
+    // Create y axis labels.  Set the labels to be halfway up the side of the chart.
     var ylabelsGroup = chartGroup.append('g')
         .attr("transform", `translate(0, ${chartHeight/2})`);
     

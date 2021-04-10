@@ -1,6 +1,9 @@
+// Set variables for the size of the SVG
 var svgWidth = 800; 
 var svgHeight = 600;
 
+// Set the margins of the chart.  Larger margins on the bottom and left to make room for
+// the axes labels.
 var chartMargin = {
     top: 25,
     right: 25,
@@ -8,23 +11,26 @@ var chartMargin = {
     left: 90
 };
 
+// Set the chart width and chart height by using the margins
 var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
 var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 
-// var circleTextGroup=""
-
+// Create the svg element, set height and width
 var svg = d3
     .select('#scatter')
     .append('svg')
     .attr('height', svgHeight)
     .attr('width', svgWidth);
 
+// Create a chart group.  Use a transform to position elements relative to the margins
 var chartGroup = svg.append("g")
     .attr("transform",`translate(${chartMargin.left}, ${chartMargin.top})`);
 
+// Set default axes for the chart
 var chosenXAxis = 'age';
 var chosenYAxis = 'obesity';
 
+// Set the min and max x axis scale based on the chosen X axis values
 function xScale(data, chosenXAxis) {
     var xLinearScale = d3.scaleLinear()
         .domain([d3.min(data, d => d[chosenXAxis]) * 0.9,
@@ -35,6 +41,7 @@ function xScale(data, chosenXAxis) {
     return xLinearScale;
 }
 
+// Set the min and max y axis scale based on the chosen Y axis values
 function yScale(data, chosenYAxis) {
     var yLinearScale = d3.scaleLinear()
     .domain([d3.min(data, d => d[chosenYAxis]) * 0.9,
@@ -45,6 +52,7 @@ function yScale(data, chosenYAxis) {
     return yLinearScale;
 }
 
+// Render/draw the X axis.  Use a transition to make animated updates to the graph.
 function renderXAxis(newXScale, xAxis) {
     var bottomAxis = d3.axisBottom(newXScale);
 
@@ -55,6 +63,7 @@ function renderXAxis(newXScale, xAxis) {
     return xAxis;
 }
 
+// Render/draw the Y axis.  Use a transition to make animated updates to the graph.
 function renderYAxis(newYScale, yAxis){
     var leftAxis = d3.axisLeft(newYScale);
 
@@ -65,6 +74,8 @@ function renderYAxis(newYScale, yAxis){
     return yAxis;
 }
 
+// Render the circles group based on the X scale, X axis, Y scale, and Y axis.
+// This will center the circles on the X and Y values 
 function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
     circlesGroup.transition()
     .duration(500)
@@ -74,6 +85,9 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYA
     return circlesGroup;
 }
 
+// Render the state labels based on the X scale, X axis, Y scale, and Y axis.
+// This will center the state labels on the X and Y values, with an offset for the Y 
+// value to help keep the state abbreviation centered in the circle.
 function renderCircleText(circleTextGroup, newXscale, chosenXAxis, newYScale, chosenYAxis) {
     circleTextGroup.transition()
     .duration(500)
@@ -83,6 +97,7 @@ function renderCircleText(circleTextGroup, newXscale, chosenXAxis, newYScale, ch
     return circleTextGroup;
 }
 
+// Update the tool tip
 function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
     var xlabel;
     var ylabel;
@@ -103,18 +118,22 @@ function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
         ylabel = "Lacks Healthcare (%)"
     }
 
+    // Create a tooltip variable
     var toolTip = d3.tip()
         .attr('class', 'd3-tip')
-        .offset([0,-70])
-        .html(function(d) {
+        .offset([0,-70]) //Use an offset so the tool tip doesn't overlap the circle you want to see
+        .html(function(d) {  //Add data to the tooltip based on the chosen X and Y axes
             return (`${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}`)
         })
 
+    // Call the tooltip with the circles group
     circlesGroup.call(toolTip);
 
+    // When a circle has a mouseover event, show the tooltip
     circlesGroup.on("mouseover", function(data) {
         toolTip.show(data);
     })
+        // When a circle has a mouseout event, hide the tooltip
         .on("mouseout", function(data, index) {
             toolTip.hide(data);
         })
@@ -126,8 +145,10 @@ function updateToolTip(chosenXAxis, chosenYAxis ,circlesGroup) {
 d3.csv('./static/data/data.csv').then(function(data, err){
     if (err) throw err; 
 
+    // Show the data in the console to confirm everything loaded correctly
     console.log(data)
 
+    // Make sure all of the numerical values in the data are interpreted as numbers
     data.forEach(function(data){
         data.age = +data.age
         data.ageMoe = +data.ageMoe

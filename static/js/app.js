@@ -378,8 +378,11 @@ d3.csv('./static/data/data.csv').then(function(data, err){
                 // Render a new circle text group (state abbr) based on the newly selected Y axis and current X axis
                 circleTextGroup = renderCircleText(updateCircleTextGroup(data), xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
-                // 
+                // Update the tooltip in the circles group based on the chosen X and Y axes
                 circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+                // Change the class of each of the y axis labels based on the selection.  The selected axis becomes "active" and other axes become "inactive"
+                // This will make the selected axis bold and other axes will have a fainter stroke
                 if (chosenYAxis === "obesity") {
                     obesityLabel
                         .classed("active", true)
@@ -413,6 +416,6 @@ d3.csv('./static/data/data.csv').then(function(data, err){
                 }
             }
     })
-}).catch(function(error){
+}).catch(function(error){  //If there are any errors for loading the data, print those errors to the console
     console.log(error);
 });
